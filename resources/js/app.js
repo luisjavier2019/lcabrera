@@ -42,4 +42,4 @@ $(".alertFooter").fadeTo(2000, 2000).slideUp(800, function(){
     $(".alertFooter").slideUp(800);
 });
 
-windows.appVue=app;
+window.appVue=app;
