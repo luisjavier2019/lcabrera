@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers\Catalogs;
 
-use App\Core\Eloquent\category;
+use App\Core\Eloquent\Category;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Requests\CategoryRequest;
+use Facades\App\Core\Facades\AlertCustom;
+
 
 class CategoryController extends Controller
 {
@@ -16,11 +19,10 @@ class CategoryController extends Controller
     public function index()
     {
         //$categories =Category::all();
-        $categories=Category::paginate(2);  
+        //$categories=Category::paginate(3);
+        $categories=Category::where('name','ILIKE',"%".request()->get('filter')."%")->paginate(3);
+
         return view('categories.index',compact('categories'));
-        
-
-
         //return view('categories.index')->with(['categories'=>Category::all()]);
         //$categories =Category::all();
         //return view('categories.index')->with(['categories'=>Category::all()]);
@@ -43,9 +45,16 @@ class CategoryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CategoryRequest $request)
     {
         //
+        //dd($request);
+        //Category::create($request->aall());
+        //Category::create($request->only(['name','description']));
+        Category::create($request->validated());
+        AlertCustom::success('Guardado Correctamente');
+        return redirect()->route('categories.index');
+        //return view('categories.index');
     }
 
     /**
@@ -68,6 +77,7 @@ class CategoryController extends Controller
     public function edit(category $category)
     {
         //
+        return view('categories.edit', compact('category'));
     }
 
     /**
@@ -77,9 +87,13 @@ class CategoryController extends Controller
      * @param  \App\Core\Eloquent\category  $category
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, category $category)
+    public function update(CategoryRequest $request, category $category)
     {
         //
+        $category->fill($request->validated());
+        $category->save();
+        AlertCustom::success('Actualizado Correctamente');
+        return redirect()->route('categories.index');
     }
 
     /**
@@ -91,5 +105,8 @@ class CategoryController extends Controller
     public function destroy(category $category)
     {
         //
+        $category->delete();
+        AlertCustom::success('Eliminado Correctamente');
+        return redirect()->route('categories.index');
     }
 }

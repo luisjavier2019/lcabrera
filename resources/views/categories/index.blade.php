@@ -7,9 +7,14 @@
         Lista de Categorias
     </div>
     <div class="card-body">
-        <h5 class="card-title">Special title treatment</h5>
-        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+        <h5 class="card-title">Categorias</h5>
+        <p class="card-text">Listado con todas las categorias que tiene la empresa NPI.</p>
         <a href="{{ route('categories.create') }}" class="btn btn-primary">AGREGAR</a>
+        
+        {!! Form::open(['method'=>'GET','route'=>'categories.index']) !!}
+        {!! Form::text('filter',request()->get('filter'),['class'=>'form-control','placeholder'=>'Buscar nombre de categoria']) !!}
+        {!! Form::close() !!}
+
         <hr/>
         <table class="table">
             <tr>
@@ -25,13 +30,21 @@
                <td>{{$category->name}}</td>
                <td>{{$category->slug}}</td>
                <td>{{$category->description}}</td>
-               <td><a href="{{ route('categories.create') }}" class="btn btn-primary">ELIMINAR</a>
-               <a href="{{ route('categories.create') }}" class="btn btn-primary">INSERTAR</a></td>   
+               <td>
+                {!! Form::open(['route'=>['categories.destroy',$category],'method'=>'DELETE','onsubmit'=>'return confirm("Estas seguro que quieres eliminar?")']) !!}
+
+               <a href="{{ route('categories.edit',$category) }}" class="btn btn-primary">EDITAR</a>
+               {!!Form::submit('ELIMINAR',['class'=>'btn btn-danger'])!!}
+
+               {!! Form::close()!!}
+               </td>   
             </tr>
             @empty
                 <tr><td colspan="4"> NO HAY REGISTROS</td></tr>
             @endforelse
         </table>
+        {!! $categories->render() !!}
+
     </div>
     </div>
 </div>

@@ -1,24 +1,37 @@
 @extends('layouts.app')
-
 @section('title','Bienvenido')
 @section('content')
 <div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">Dashboard</div>
-
-                <div class="card-body">
-                    @if (session('status'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
-                        </div>
-                    @endif
-
-                    You are logged in!
-                </div>
-            </div>
-        </div>
-    </div>
+   <div class="row justify-content-center">
+     <article-list></article-list>             
+   </div>
 </div>
 @endsection
+@push('jsCustom')
+<script type="text/javascript">
+    document.addEventListener("DOMContentLoaded", function(){
+        /*Pusher.logToConsole = true;
+
+        var pusher = new Pusher('a31bfdf1fda40c186074', {
+            cluster: 'us2',
+            forceTLS: true
+        });
+
+        var channel = pusher.subscribe('my-channel');
+            channel.bind('my-event', function(data) {
+            alert(JSON.stringify(data));
+        });*/
+
+        var channel = Echo.channel('lcabrera');
+            channel.listen('.articles', function(data) {
+               console.log(JSON.stringify(data));
+
+               appVue.$message({
+                    type: 'info',
+                    message: data.message
+                });
+
+            });
+    });
+</script>
+@endpush

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+   <head>
+       <title></title>
+               <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+               <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.min.js"></script>
+
+               <!-- import CSS -->
+               <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+               <!-- import JavaScript -->
+               <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+   </head>
+   <body>
+       <main>
+           <button @click="loadInfo">CARGAR</button>
+           <ol v-if="posts">
+               <li v-for="(item,idx) in posts">
+                   {{ item.title }}
+               </li>
+           </ol>
+           <span v-else> ESPERANDO DATA</span>
+           {{ $data }}
+       </main>
+   </body>
+
+<script type="text/javascript">
+    //(new Vue({el:'main'})).notify
+       new Vue({
+           el:'main',
+           data:{
+            posts: null
+           },
+           methods:{
+               loadInfo(){
+
+                this.$confirm('This will permanently delete the file. Continue?', 'Warning', {
+                confirmButtonText: 'OK',
+                cancelButtonText: 'Cancel',
+                type: 'warning',
+                center: true
+                }).then(() => {
+                this.$message({
+                    type: 'success',
+                    message: 'Delete completed'
+                });
+                }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: 'Delete canceled'
+                });
+                });
+
+
+
+                   this.posts=null;
+                   axios.get('https://jsonplaceholder.typicode.com/posts').then((response)=>{
+                       this.posts=response.data;
+                       this.notificar();
+                   });    
+               },
+               notificar(){
+                   this.$notify({
+                        title:'Info',
+                        message:'Informacion cargada',
+                        type:'success'
+                   });
+               }
+           },
+           mounted(){
+               this.loadInfo()
+           }
+       });
+   </script>
+</html>

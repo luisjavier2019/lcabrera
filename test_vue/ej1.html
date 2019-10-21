@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+        
+    </head>
+    <body>
+        <main>
+            <h1>{{ texto }}</h1>
+            <input type="text" v-model="texto">
+              <h2 v-if="texto && texto <= 6"> MENOR A 6</h2>
+              <h2 v-else-if="texto && texto > 6 && texto <= 20"> MAYOR A 6 Y MENOR A 20</h2>
+              <h2 v-else> MAYOR A 20</h2>
+            {{$data}}
+        </main>
+    </body>
+    <script type="text/javascript">
+        new Vue({
+            el:'main',
+            data:{
+                texto:0
+            }
+        });
+    </script>
+</html>

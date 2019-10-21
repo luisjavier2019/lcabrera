@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddColumnsCategories extends Migration
+class AddCategoryToArticle extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,10 @@ class AddColumnsCategories extends Migration
      */
     public function up()
     {
-        Schema::table('categories', function (Blueprint $table) {
-            $table->bigInteger('update_user');
+        Schema::table('articles', function (Blueprint $table) {
+            //
+           $table->unsignedBigInteger('category_id')->nullable();
+           $table->foreign('category_id')->references('id')->on('categories');
         });
     }
 
@@ -25,7 +27,7 @@ class AddColumnsCategories extends Migration
      */
     public function down()
     {
-        Schema::table('categories', function (Blueprint $table) {
+        Schema::table('articles', function (Blueprint $table) {
             //
         });
     }
